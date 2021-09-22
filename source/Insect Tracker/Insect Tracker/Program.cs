@@ -33,10 +33,10 @@ namespace Insect_Tracker
                     await ContextSeed.SeedRolesAsync(userManager, roleManager);
                     await ContextSeed.SeedSuperAdminAsync(userManager, roleManager);
                 }
-                catch (Exception expt)
+                catch (Exception ex)
                 {
                     var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(expt, "An error ocurred seeding the DB.");
+                    logger.LogError(ex, "An error ocurred seeding the DB.");
                 }
             }
             host.Run();

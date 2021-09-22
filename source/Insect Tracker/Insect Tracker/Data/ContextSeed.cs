@@ -34,7 +34,7 @@ namespace Insect_Tracker.Data
 
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultUser, "password");
+                    await userManager.CreateAsync(defaultUser, "passwordT3a$");
                     await userManager.AddToRoleAsync(defaultUser, Configuration.Roles.SuperAdmin.ToString());
                 }
             }
