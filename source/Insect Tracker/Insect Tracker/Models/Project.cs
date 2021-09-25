@@ -26,7 +26,10 @@ namespace Insect_Tracker.Models
         public bool Finished { get; set; }
 
         [Required]
-        [Display(Name = "Created")]
+        public ApplicationUser Creator { get; set; }
+
+        [Required]
+        [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
 
         [Display(Name = "Date Finished")]
@@ -38,6 +41,7 @@ namespace Insect_Tracker.Models
 
         public ICollection<IdentityRole> Roles { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<UserProject> Users { get; set; }
 
         public Project()
         {

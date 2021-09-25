@@ -26,7 +26,7 @@ namespace Insect_Tracker.Models
         public ApplicationUser SentBy { get; set; }
 
         [Required]
-        public ICollection<ApplicationUser> SentTo { get; set; }
+        public ICollection<UserMessage> SentTo { get; set; }
 
         public Message()
         {

@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20210923075236_completed database.Designer.cs" />
     <Compile Remove="Migrations\20210923075807_completed database.cs" />
     <Compile Remove="Migrations\20210923075807_completed database.Designer.cs" />
+    <Compile Remove="Migrations\20210925025336_Added comments and attachments.cs" />
+    <Compile Remove="Migrations\20210925025336_Added comments and attachments.Designer.cs" />
   </ItemGroup>
 
 

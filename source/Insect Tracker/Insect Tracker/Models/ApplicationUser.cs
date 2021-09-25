@@ -24,5 +24,8 @@ namespace Insect_Tracker.Models
         public string LastName { get; set; }
 
         public string ProfilePicture { get; set; }
+
+        public ICollection<UserMessage> Messages { get; set; }
+        public ICollection<UserProject> Projects { get; set; }
     }
 }

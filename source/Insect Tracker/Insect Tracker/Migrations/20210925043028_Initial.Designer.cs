@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Insect_Tracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210924010005_Initial")]
+    [Migration("20210925043028_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,9 +66,6 @@ namespace Insect_Tracker.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("MessageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -100,8 +97,6 @@ namespace Insect_Tracker.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MessageId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -143,6 +138,10 @@ namespace Insect_Tracker.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
@@ -158,6 +157,8 @@ namespace Insect_Tracker.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("TopicId");
 
@@ -178,6 +179,11 @@ namespace Insect_Tracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(512)")
@@ -196,6 +202,10 @@ namespace Insect_Tracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -221,6 +231,8 @@ namespace Insect_Tracker.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatorId");
+
                     b.ToTable("Project");
                 });
 
@@ -230,6 +242,10 @@ namespace Insect_Tracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Closed")
                         .HasColumnType("bit");
@@ -258,9 +274,33 @@ namespace Insect_Tracker.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorId");
+
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Ticket");
+                });
+
+            modelBuilder.Entity("Insect_Tracker.Models.UserMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserMessage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -399,13 +439,6 @@ namespace Insect_Tracker.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("Insect_Tracker.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("Insect_Tracker.Models.Message", null)
-                        .WithMany("SentTo")
-                        .HasForeignKey("MessageId");
-                });
-
             modelBuilder.Entity("Insect_Tracker.Models.Attachment", b =>
                 {
                     b.HasOne("Insect_Tracker.Models.Comment", "Comment")
@@ -415,6 +448,12 @@ namespace Insect_Tracker.Migrations
 
             modelBuilder.Entity("Insect_Tracker.Models.Comment", b =>
                 {
+                    b.HasOne("Insect_Tracker.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Insect_Tracker.Models.Ticket", "Topic")
                         .WithMany("Comments")
                         .HasForeignKey("TopicId");
@@ -429,11 +468,39 @@ namespace Insect_Tracker.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Insect_Tracker.Models.Project", b =>
+                {
+                    b.HasOne("Insect_Tracker.Models.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Insect_Tracker.Models.Ticket", b =>
                 {
+                    b.HasOne("Insect_Tracker.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Insect_Tracker.Models.Project", null)
                         .WithMany("Tickets")
                         .HasForeignKey("ProjectId");
+                });
+
+            modelBuilder.Entity("Insect_Tracker.Models.UserMessage", b =>
+                {
+                    b.HasOne("Insect_Tracker.Models.Message", "Message")
+                        .WithMany("SentTo")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Insect_Tracker.Models.ApplicationUser", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

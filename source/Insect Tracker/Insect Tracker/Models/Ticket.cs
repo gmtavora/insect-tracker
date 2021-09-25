@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Insect_Tracker.Models;
 
 namespace Insect_Tracker.Models
 {
@@ -11,6 +12,9 @@ namespace Insect_Tracker.Models
     {
         [Required]
         public int Id { get; set; }
+
+        [Required]
+        public ApplicationUser Author { get; set; }
 
         [Required]
         [StringLength(256)]

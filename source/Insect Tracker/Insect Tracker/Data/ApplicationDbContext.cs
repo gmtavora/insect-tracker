@@ -48,7 +48,6 @@ namespace Insect_Tracker.Data
             {
                 entity.ToTable("UserTokens");
             });
-
         }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -61,5 +60,9 @@ namespace Insect_Tracker.Data
         public DbSet<Insect_Tracker.Models.Project> Project { get; set; }
 
         public DbSet<Insect_Tracker.Models.Ticket> Ticket { get; set; }
+        public DbSet<Insect_Tracker.Models.Comment> Comment { get; set; }
+        public DbSet<Insect_Tracker.Models.Attachment> Attachment { get; set; }
+        public DbSet<Insect_Tracker.Models.UserMessage> UserMessage { get; set; }
+        public DbSet<Insect_Tracker.Models.UserProject> UserProject { get; set; }
     }
 }
