@@ -13,40 +13,53 @@ namespace Insect_Tracker.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.HasDefaultSchema("Identity");
-            builder.Entity<IdentityUser>(entity =>
+
+            builder.Entity<ApplicationUser>(entity =>
             {
-                entity.ToTable(name: "User");
+                entity.ToTable("User");
             });
+
             builder.Entity<IdentityRole>(entity =>
             {
-                entity.ToTable(name: "Role");
+                entity.ToTable("Role");
             });
+
             builder.Entity<IdentityUserRole<string>>(entity =>
             {
                 entity.ToTable("UserRoles");
             });
+
             builder.Entity<IdentityUserClaim<string>>(entity =>
             {
                 entity.ToTable("UserClaims");
             });
+
             builder.Entity<IdentityUserLogin<string>>(entity =>
             {
                 entity.ToTable("UserLogins");
             });
+
             builder.Entity<IdentityRoleClaim<string>>(entity =>
             {
                 entity.ToTable("RoleClaims");
             });
+
             builder.Entity<IdentityUserToken<string>>(entity =>
             {
                 entity.ToTable("UserTokens");
             });
+
         }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+
+        public DbSet<Insect_Tracker.Models.Message> Message { get; set; }
+
+        public DbSet<Insect_Tracker.Models.Project> Project { get; set; }
+
+        public DbSet<Insect_Tracker.Models.Ticket> Ticket { get; set; }
     }
 }

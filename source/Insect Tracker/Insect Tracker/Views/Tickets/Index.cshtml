@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Insect_Tracker.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Tickets";
+    Layout = "_LayoutDashboard";
+}
+
+<h1 class="mt-4">Tickets</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="~/">Home</a></li>
+    <li class="breadcrumb-item active">Tickets</li>
+</ol>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table" id="data">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Closed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateReported)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClosed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastModified)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Closed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateReported)
+                </td>
+                <td>
+                    @{ 
+                        var dateClosed = "";
+
+                        if (item.Closed)
+                            dateClosed = item.DateClosed.ToString();
+                    }
+
+                    @dateClosed
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastModified)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section  Scripts {
+    <script>
+        $(document).ready( function () {
+            $('#data').DataTable();
+        } );
+    </script>
+}

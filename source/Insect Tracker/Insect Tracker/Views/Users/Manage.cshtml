@@ -1,0 +1,34 @@
+﻿@model List<ManageRolesViewModel>
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "_LayoutDashboard";
+
+}
+
+<h1 class="mt-4">Add or remove roles</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="~/">Home</a></li>
+    <li class="breadcrumb-item"><a href="~/Users/">Users</a></li>
+    <li class="breadcrumb-item active">Manage</li>
+</ol>
+
+<h4>Add or remove roles for user @ViewBag.UserName</h4>
+
+<form method="post">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="form-check m1">
+            <input type="hidden" asp-for="@Model[i].RoleId" />
+            <input type="hidden" asp-for="@Model[i].RoleName" />
+            <input asp-for="@Model[i].Selected" class="form-check-input" />
+            <label class="form-check-label" asp-for="@Model[i].Selected">
+                @Model[i].RoleName
+            </label>
+        </div>
+    }
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <input type="submit" value="Update" class="btn btn-primary" style="width:auto" />
+    <a asp-action="Index" asp-route-id="@ViewBag.userId" class="btn btn-primary" style="width:auto">Cancel</a>
+</form>

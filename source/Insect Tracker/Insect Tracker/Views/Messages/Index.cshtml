@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Insect_Tracker.Models.Message>
+
+@{
+    ViewData["Title"] = "Messages";
+    Layout = "_LayoutDashboard";
+}
+
+<h1 class="mt-4">Messages</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="~/">Home</a></li>
+    <li class="breadcrumb-item active">Messages</li>
+</ol>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table" id="data">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateSent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateSent)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    $(document).ready( function () {
+        $('#data').DataTable();
+    } );
+}

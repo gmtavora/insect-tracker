@@ -1,0 +1,67 @@
+﻿@model Insect_Tracker.Models.Ticket
+
+@{
+    ViewData["Title"] = "Tickets";
+    Layout = "_LayoutDashboard";
+}
+
+<h1 class="mt-4">Title</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="~/">Home</a></li>
+    <li class="breadcrumb-item"><a href="~/Tickets/">Tickets</a></li>
+    <li class="breadcrumb-item active">Ticket</li>
+</ol>
+
+<div>
+    <h4>Ticket</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Closed)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Closed)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateReported)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateReported)
+        </dd>
+        <dt class="col-sm-2">
+            @{ 
+                var dateFinished = "";
+
+                if (Model.Closed)
+                    dateFinished = Model.DateClosed.ToString();
+            }
+
+            @dateFinished
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateClosed)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastModified)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastModified)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

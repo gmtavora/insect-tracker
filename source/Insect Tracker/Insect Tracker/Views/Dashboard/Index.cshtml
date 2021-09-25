@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_LayoutDashboard";
+}
+
+<h1 class="mt-4">Dashboard</h1>
+<div class="row mt-3">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <strong>Messages</strong>
+                <p class="card-text card-numbers text-center text-primary">12</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <strong>Tickets</strong>
+                <p class="card-text card-numbers text-center text-danger">2</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <strong>Projects</strong>
+                <p class="card-text card-numbers text-center text-warning">3</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-sm-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-area me-1"></i>
+                Area Chart Example
+            </div>
+            <div class="card-body"><canvas id="myAreaChart"></canvas></div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-bar me-1"></i>
+                Bar Chart Example
+            </div>
+            <div class="card-body"><canvas id="myBarChart"></canvas></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+    <script src="~/graphs/chart-area-demo.js"></script>
+    <script src="~/graphs/chart-bar-demo.js"></script>
+}

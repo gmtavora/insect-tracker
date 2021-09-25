@@ -6,6 +6,19 @@
     <RootNamespace>Insect_Tracker</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20210922081304_updated database.cs" />
+    <Compile Remove="Migrations\20210922081304_updated database.Designer.cs" />
+    <Compile Remove="Migrations\20210922081808_Updated database.cs" />
+    <Compile Remove="Migrations\20210922081808_Updated database.Designer.cs" />
+    <Compile Remove="Migrations\20210923073842_completed database.cs" />
+    <Compile Remove="Migrations\20210923073842_completed database.Designer.cs" />
+    <Compile Remove="Migrations\20210923075236_completed database.cs" />
+    <Compile Remove="Migrations\20210923075236_completed database.Designer.cs" />
+    <Compile Remove="Migrations\20210923075807_completed database.cs" />
+    <Compile Remove="Migrations\20210923075807_completed database.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
