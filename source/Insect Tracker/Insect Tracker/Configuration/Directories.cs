@@ -2,7 +2,7 @@
 {
     public static class Directories
     {
-        public const string PROFILE_PICTURES = "users/pics/";
-        public const string ATTACHMENTS = "attachments/";
+        public const string PROFILE_PICTURES = "wwwroot/users/pics/";
+        public const string ATTACHMENTS = "wwwroot/attachments/";
     }
 }

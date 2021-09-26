@@ -15,5 +15,7 @@ namespace Insect_Tracker.Models
         [Required]
         [StringLength(512)]
         public string Description { get; set; }
+
+        public byte[] File { get; set; }
     }
 }

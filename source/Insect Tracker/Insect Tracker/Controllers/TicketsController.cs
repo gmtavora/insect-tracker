@@ -41,7 +41,13 @@ namespace Insect_Tracker.Controllers
             }
 
             var ticket = await _context.Ticket
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Where(t => t.Id == id)
+                .Include(t => t.Comments)
+                .ThenInclude(c => c.Attachments)
+                .Include(t => t.Author)
+                .FirstOrDefaultAsync();
+
+
             if (ticket == null)
             {
                 return NotFound();
@@ -73,8 +79,10 @@ namespace Insect_Tracker.Controllers
                 ticket.LastModified = DateTime.UtcNow;
                 ticket.Author = _userManager.GetUserAsync(User).Result;
                 ticket.Title = input.Title;
-                ticket.Comments.Add(comment);
+                ticket.Comments = new List<Comment>();
                 comment.Message = input.Description;
+                comment.Author = ticket.Author;
+                comment.DateSent = ticket.DateReported;
 
                 if (Request.Form.Files.Count > 0)
                 {
@@ -82,28 +90,39 @@ namespace Insect_Tracker.Controllers
 
                     foreach (var formFile in files)
                     {
-                        using (var dataStream = new MemoryStream())
+                        var rand = new Random();
+
+                        Attachment fileAttachment = new Attachment();
+
+                        string FileName = formFile.FileName;
+                        string File = rand.Next(0, 10000).ToString() + "_" + formFile.FileName;
+
+                        DirectoryInfo info = new DirectoryInfo(Directories.ATTACHMENTS);
+
+                        if (!info.Exists)
                         {
-                            await formFile.CopyToAsync(dataStream);
-
-                            Attachment fileAttachment = new Attachment();
-
-                            DirectoryInfo info = new DirectoryInfo(Directories.ATTACHMENTS);
-
-                            if (!info.Exists)
-                                info.Create();
-
-                            fileAttachment.File = Path.Combine(Directories.ATTACHMENTS, fileAttachment.Id.ToString());
-
-                            using (FileStream outputFileStream = new FileStream(Directories.ATTACHMENTS, FileMode.Create))
-                                dataStream.CopyTo(outputFileStream);
-
-                            _context.Add(fileAttachment);
-
-                            comment.Attachments.Add(fileAttachment);
+                            info.Create();
                         }
+
+                        string path = Path.Combine(Directories.ATTACHMENTS, File);
+
+                        using (FileStream outputFileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(outputFileStream);
+                        }
+
+                        fileAttachment.Comment = comment;
+
+                        fileAttachment.FileName = FileName;
+                        fileAttachment.File = File;
+
+                        _context.Add(fileAttachment);
+
+                        comment.Attachments.Add(fileAttachment);
                     }
                 }
+
+                ticket.Comments.Add(comment);
 
                 _context.Add(comment);
                 _context.Add(ticket);
@@ -187,7 +206,12 @@ namespace Insect_Tracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ticket = await _context.Ticket.FindAsync(id);
+            var ticket = await _context.Ticket
+                .Where(t => t.Id == id)
+                .Include(t => t.Comments)
+                .ThenInclude(t => t.Attachments)
+                .Include(t => t.Author)
+                .FirstOrDefaultAsync();
             _context.Ticket.Remove(ticket);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -14,7 +14,7 @@
 
 
 <div class="col-sm-6">
-    <form asp-action="Create">
+    <form asp-action="Create" method="POST" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group mb-3">
             <label asp-for="Title" class="control-label"></label>
@@ -26,9 +26,9 @@
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
-        <label for="add-attachment" class="form-label">Attachment:</label>
+        <label asp-for="File" class="form-label">Attachment:</label>
         <div id="add-attachment" class="input-group mb-3">
-            <input type="file" class="form-control" id="inputGroupFile">
+            <input type="file" name="files" asp-for="File" class="form-control" multiple>
         </div>
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />

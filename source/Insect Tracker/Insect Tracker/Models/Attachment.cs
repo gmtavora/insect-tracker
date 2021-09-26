@@ -13,6 +13,10 @@ namespace Insect_Tracker.Models
 
         [Required]
         [StringLength(256)]
+        public string FileName { get; set; }
+
+        [Required]
+        [StringLength(256)]
         public string File { get; set; }
 
         public Comment Comment { get; set; }
