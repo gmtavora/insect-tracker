@@ -3,5 +3,6 @@
     public static class Directories
     {
         public const string PROFILE_PICTURES = "users/pics/";
+        public const string ATTACHMENTS = "attachments/";
     }
 }

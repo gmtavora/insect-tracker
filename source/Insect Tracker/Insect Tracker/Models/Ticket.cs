@@ -19,10 +19,6 @@ namespace Insect_Tracker.Models
         [Required]
         [StringLength(256)]
         public string Title { get; set; }
-
-        [Required]
-        [StringLength(512)]
-        public string Description { get; set; }
         
         [Required]
         [DefaultValue(false)]

@@ -18,10 +18,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Text)
+                @Html.DisplayNameFor(model => model.DateSent)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateSent)
+                @Html.DisplayNameFor(model => model.SentBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
             </th>
             <th></th>
         </tr>
@@ -31,14 +34,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.DateSent)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @Html.DisplayFor(modelItem => item.SentBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    <a asp-action="Open" asp-route-id="@item.Id">Open</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
@@ -47,7 +52,9 @@
 </table>
 
 @section Scripts {
-    $(document).ready( function () {
-        $('#data').DataTable();
-    } );
+    <script>
+        $(document).ready( function () {
+            $('#data').DataTable();
+        });
+    </script>
 }
