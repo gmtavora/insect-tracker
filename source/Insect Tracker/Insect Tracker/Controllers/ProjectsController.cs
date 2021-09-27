@@ -4,19 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Insect_Tracker.Data;
 using Insect_Tracker.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Insect_Tracker.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+
+        public class InputModel
+        {
+            [Required]
+            [StringLength(256)]
+            public string Name { get; set; }
+
+            [Required]
+            [StringLength(256)]
+            public string Description { get; set; }
+
+            public ICollection<string> Users { get; set; }
         }
 
         // GET: Projects
@@ -34,7 +51,12 @@ namespace Insect_Tracker.Controllers
             }
 
             var project = await _context.Project
-                .FirstOrDefaultAsync(m => m.Id == id);
+                                        .Where(m => m.Id == id)
+                                        .Include(p => p.Tickets)
+                                        .Include(p => p.Users)
+                                        .ThenInclude(p => p.User)
+                                        .FirstOrDefaultAsync();
+
             if (project == null)
             {
                 return NotFound();
@@ -54,15 +76,37 @@ namespace Insect_Tracker.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Finished,DateCreated,DateFinished,LastModified")] Project project)
+        public async Task<IActionResult> Create(InputModel input)
         {
+            Project project = new Project();
+
             if (ModelState.IsValid)
             {
+                project.Name = input.Name;
+                project.Description = input.Description;
                 project.Finished = false;
                 project.DateCreated = DateTime.UtcNow;
                 project.LastModified = DateTime.UtcNow;
-
+                project.Creator = await _userManager.GetUserAsync(User);
                 _context.Add(project);
+                await _context.SaveChangesAsync();
+
+                foreach (string id in input.Users)
+                {
+                    ApplicationUser user = await _userManager.FindByIdAsync(id);
+
+                    if (user == null)
+                    {
+                        continue;
+                    }
+
+                    UserProject userProject = new UserProject();
+                    userProject.UserId = id;
+                    userProject.ProjectId = project.Id;
+
+                    _context.Add(userProject);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

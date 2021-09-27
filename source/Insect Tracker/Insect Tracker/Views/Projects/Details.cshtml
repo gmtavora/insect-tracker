@@ -1,67 +1,125 @@
-﻿@model Insect_Tracker.Models.Project
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@model Insect_Tracker.Models.Project
 
 @{
     ViewData["Title"] = "Projects";
     Layout = "_LayoutDashboard";
 }
 
-<h1 class="mt-4">Title</h1>
+<h1 class="mt-4">Project</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="~/">Home</a></li>
     <li class="breadcrumb-item"><a href="~/Projects/">Projects</a></li>
-    <li class="breadcrumb-item active">Project</li>
+    <li class="breadcrumb-item active">@Model.Name</li>
 </ol>
 
-<div>
-    <h4>Project</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Finished)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Finished)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateFinished)
-        </dt>
-        <dd class="col-sm-10">
-            @{ 
-                var dateFinished = "";
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>@Model.Name</h5>
+        @if (Model.Finished)
+        {
+            <span class="badge rounded-pill bg-success mb-3">Finished</span>
+        }
+        else
+        {
+            <span class="badge rounded-pill bg-primary mb-3">In Progress</span>
+        }
 
-                if (Model.Finished)
-                    dateFinished = Model.DateFinished.ToString();
+        <p>@Model.Description</p>
+        <table class="table mb-3">
+            <tr>
+                <td>Created by</td>
+                <td>@Model.Creator.FirstName  @Model.Creator.LastName</td>
+            </tr>
+            <tr>
+                <td>Started</td>
+                <td>@Model.DateCreated</td>
+            </tr>
+            <tr>
+                <td>Last modified</td>
+                <td>@Model.LastModified</td>
+            </tr>
+            @if (Model.Finished)
+            {
+                <tr>
+                    <td>Finished</td>
+                    <td>@Model.DateFinished</td>
+                </tr>
             }
+        </table>
 
-            @dateFinished
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastModified)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastModified)
-        </dd>
-    </dl>
+        @if (!Model.Finished)
+        {
+            <button type="button" class="btn btn-primary">Finish</button>
+            <button type="button" class="btn btn-primary">Edit</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-primary">Reopen</button>
+        }
+        <button type="button" class="btn btn-primary">Remove</button>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="card mb-3">
+    <div class="card-header">
+        Users
+    </div>
+    <div class="card-body">
+        <table id="users" class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Roles</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (UserProject user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.User.FirstName @user.User.LastName</td>
+                        <td>@string.Join(", ", UserManager.GetRolesAsync(user.User).Result.ToList())</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        Tickets
+    </div>
+    <div class="card-body">
+        <table id="tickets" class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Last Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Ticket ticket in Model.Tickets)
+                {
+                    <tr>
+                        <td>@ticket.Title</td>
+                        <td>@ticket.Author.FirstName @ticket.Author.LastName</td>
+                        <td>@ticket.LastModified</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#users').DataTable();
+            $('#tickets').DataTable();
+        });
+    </script>
+}

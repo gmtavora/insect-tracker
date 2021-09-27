@@ -77,7 +77,7 @@ namespace Insect_Tracker.Controllers
                 ticket.Closed = false;
                 ticket.DateReported = DateTime.UtcNow;
                 ticket.LastModified = DateTime.UtcNow;
-                ticket.Author = _userManager.GetUserAsync(User).Result;
+                ticket.Author = await _userManager.GetUserAsync(User);
                 ticket.Title = input.Title;
                 ticket.Comments = new List<Comment>();
                 comment.Message = input.Description;
