@@ -485,6 +485,13 @@ hr.divider {
   margin-right: 10px;
 }
 
+.big-user-pic {
+  width: 192px;
+  height: 192px;
+  float: left;
+  border-radius: 91px;
+}
+
 .nav-link-icon {
   width: 16px;
 }

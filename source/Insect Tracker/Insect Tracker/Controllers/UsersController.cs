@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Insect_Tracker.Models;
+using Insect_Tracker.Data;
 
 namespace Insect_Tracker.Controllers
 {
     public class UsersController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
         }
@@ -126,6 +129,38 @@ namespace Insect_Tracker.Controllers
                 await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
 
             return RedirectToAction("Index");
+        }
+
+        // GET: /Users/Details/5
+        public async Task<IActionResult> Details (string username)
+        {
+            if (username == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                                     .Where(u => u.UserName == username)
+                                     .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userView = new UserViewModel();
+
+            userView.UserName = user.UserName;
+            userView.UserId = user.Id;
+            userView.FirstName = user.FirstName;
+            userView.LastName = user.LastName;
+            userView.Email = user.Email;
+            userView.ProfilePicture = user.ProfilePicture;
+            userView.Roles = await GetUserRoles(user);
+            userView.PhoneNumber = user.PhoneNumber;
+            userView.DateSigned = user.DateSigned;
+
+            return View(userView);
         }
     }
 }

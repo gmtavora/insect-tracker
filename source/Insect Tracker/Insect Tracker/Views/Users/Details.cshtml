@@ -1,0 +1,54 @@
+﻿@using Insect_Tracker.Models
+@using  Insect_Tracker.Configuration
+@model UserViewModel
+@{
+    ViewData["Title"] = Model.FirstName + " " + Model.LastName;
+    Layout = "_LayoutDashboard";
+}
+
+<h1 class="mt-4">@Model.FirstName @Model.LastName</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item"><a href="#">Users</a></li>
+    <li class="breadcrumb-item active">@Model.UserName</li>
+</ol>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-3">
+                @if (Model.ProfilePicture != null)
+                {
+                    <img src="~/@Directories.ATTACHMENTS@Model.UserId " class="big-user-pic" />
+                }
+                else
+                {
+                    <img src="~/images/blank-profile-wanderer-creative.png" class="big-user-pic" />
+                }
+            </div>
+
+            <div class="col-sm-9">
+                <table class="table table-sm">
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Email)</td>
+                        <td>@Html.DisplayFor(model => model.Email)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.PhoneNumber)</td>
+                        <td>@Html.DisplayFor(model => model.PhoneNumber)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Roles)</td>
+                        <td>@Html.DisplayFor(model => model.Roles)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.DateSigned)</td>
+                        <td>@Html.DisplayFor(model => model.DateSigned)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary">Return</button>

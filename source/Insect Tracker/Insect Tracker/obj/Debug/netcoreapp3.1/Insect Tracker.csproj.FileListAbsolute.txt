@@ -235,3 +235,4 @@ C:\Users\Gabriel\Documents\Projetos\InsectTracker\insect-tracker\source\Insect T
 C:\Users\Gabriel\Documents\Projetos\InsectTracker\insect-tracker\source\Insect Tracker\Insect Tracker\obj\Debug\netcoreapp3.1\Razor\Views\Users\Index.cshtml.g.cs
 C:\Users\Gabriel\Documents\Projetos\InsectTracker\insect-tracker\source\Insect Tracker\Insect Tracker\obj\Debug\netcoreapp3.1\Razor\Views\Users\Roles.cshtml.g.cs
 C:\Users\Gabriel\Documents\Projetos\InsectTracker\insect-tracker\source\Insect Tracker\Insect Tracker\obj\Debug\netcoreapp3.1\Razor\Views\Users\Manage.cshtml.g.cs
+C:\Users\Gabriel\Documents\Projetos\InsectTracker\insect-tracker\source\Insect Tracker\Insect Tracker\obj\Debug\netcoreapp3.1\Razor\Views\Users\Details.cshtml.g.cs

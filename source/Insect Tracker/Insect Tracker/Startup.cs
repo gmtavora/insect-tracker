@@ -61,6 +61,9 @@ namespace Insect_Tracker
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(name: "users",
+                    pattern: "Users/Details/{username}",
+                    defaults: new { controller = "Users", action = "Details" });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
